@@ -5360,6 +5360,10 @@ var DayTableMixin = FC.DayTableMixin = {
 				(this.isRTL ? '' : this.renderHeadIntroHtml()) +
 				this.renderHeadDateCellsHtml() +
 				(this.isRTL ? this.renderHeadIntroHtml() : '') +
+			'</tr>' +
+			//NZ Edit - Hardwiring 3 rooms, will make dynamic
+			'<tr>' +
+				'<th></th><th>Room 1</th><th>Room 2</th><th>Room 3</th>' +
 			'</tr>';
 	},
 
@@ -5370,7 +5374,13 @@ var DayTableMixin = FC.DayTableMixin = {
 
 		for (col = 0; col < this.colCnt; col++) {
 			date = this.getCellDate(0, col);
-			htmls.push(this.renderHeadDateCellHtml(date));
+			//NZ Edit: Hardwiring some room divisions
+			if (this.colCnt === 1) {
+				htmls.push(this.renderHeadDateCellHtml(date, 3));
+			}
+			else {
+				htmls.push(this.renderHeadDateCellHtml(date));
+			}
 		}
 
 		return htmls.join('');
@@ -5423,12 +5433,16 @@ var DayTableMixin = FC.DayTableMixin = {
 
 
 	renderBgCellsHtml: function(row) {
+		//NZ EDIT - Handle Rooms. Hardwired to 3
 		var htmls = [];
 		var col, date;
+		var room_total = 3;
 
 		for (col = 0; col < this.colCnt; col++) {
-			date = this.getCellDate(row, col);
-			htmls.push(this.renderBgCellHtml(date));
+			for (room = 0; room < room_total; room++) {
+                date = this.getCellDate(row, col);
+                htmls.push(this.renderBgCellHtml(date));
+            }
 		}
 
 		return htmls.join('');
@@ -5614,10 +5628,14 @@ var DayGrid = FC.DayGrid = Grid.extend(DayTableMixin, {
 	renderNumberCellsHtml: function(row) {
 		var htmls = [];
 		var col, date;
+		//NZ Edit
+		var room_total = 3
 
 		for (col = 0; col < this.colCnt; col++) {
-			date = this.getCellDate(row, col);
-			htmls.push(this.renderNumberCellHtml(date));
+			for (room = 0; room < room_total; room++) {
+                date = this.getCellDate(row, col);
+                htmls.push(this.renderNumberCellHtml(date));
+            }
 		}
 
 		return htmls.join('');
